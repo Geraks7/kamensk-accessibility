@@ -1,0 +1,4 @@
+type,norm_radius_m,share_within_radius,share_network_at_radius,gap_pp,share_network_15min,n_facilities
+school,500,0.7123,0.2324,48.0,0.6711,36
+kindergarten,300,0.5873,0.1339,45.3,0.662,64
+clinic,1000,0.7643,0.411,35.3,0.4581,31

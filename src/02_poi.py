@@ -31,7 +31,8 @@ TAGS = {
     "leisure": ["sports_centre", "swimming_pool"],
 }
 
-OUT = Path("data/processed")
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "data" / "processed"
 OUT.mkdir(parents=True, exist_ok=True)
 ox.settings.use_cache = True
 

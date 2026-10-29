@@ -24,8 +24,9 @@ PLACE = "Каменск-Уральский, Свердловская облас�
 CENTER = (56.4145, 61.9186)
 DIST_M = 11_000
 
-OUT_PROC = Path("data/processed")
-OUT_MAPS = Path("maps")
+ROOT = Path(__file__).resolve().parents[1]
+OUT_PROC = ROOT / "data" / "processed"
+OUT_MAPS = ROOT / "maps"
 OUT_PROC.mkdir(parents=True, exist_ok=True)
 OUT_MAPS.mkdir(parents=True, exist_ok=True)
 
