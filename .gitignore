@@ -23,3 +23,9 @@ maps/draft_*
 .env
 .vscode/
 .idea/
+
+# Логи и кэш osmnx
+run*.log
+cache/
+src/cache/
+*.log
