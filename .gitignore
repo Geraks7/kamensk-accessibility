@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Данные: сырые файлы большие, в репозиторий не кладём
+data/raw/*
+!data/raw/.gitkeep
+
+# Промежуточные геоданные
+*.gpkg
+*.graphml
+*.osm.pbf
+*.tif
+*.tiff
+
+# Карты коммитим только итоговые (папка maps/), черновики — нет
+maps/draft_*
+
+# Среда
+.env
+.vscode/
+.idea/

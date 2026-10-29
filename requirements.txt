@@ -1,0 +1,12 @@
+osmnx>=2.0
+geopandas>=0.14
+shapely>=2.0
+pyproj>=3.5
+networkx>=3.0
+matplotlib>=3.8
+contextily>=1.5
+mapclassify>=2.6
+folium>=0.15
+h3>=4.0
+pyogrio>=0.7
+pandas>=2.0
