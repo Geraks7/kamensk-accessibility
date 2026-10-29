@@ -33,6 +33,7 @@ import requests
 
 ROOT = Path(__file__).resolve().parents[1]
 PROC = ROOT / "data" / "processed"
+CACHE = ROOT / "data" / "cache"
 
 PLACE = "Каменск-Уральский, Свердловская область, Россия"
 
@@ -314,7 +315,9 @@ def normative_table(demand, poi, dist_by_type):
 
 
 def main():
+    CACHE.mkdir(parents=True, exist_ok=True)
     ox.settings.use_cache = True
+    ox.settings.cache_folder = str(CACHE)
 
     print("1. Загрузка данных")
     G_raw = load_graph()

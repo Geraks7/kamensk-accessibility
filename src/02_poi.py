@@ -34,7 +34,10 @@ TAGS = {
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "processed"
 OUT.mkdir(parents=True, exist_ok=True)
+CACHE = ROOT / "data" / "cache"
+CACHE.mkdir(parents=True, exist_ok=True)
 ox.settings.use_cache = True
+ox.settings.cache_folder = str(CACHE)
 
 
 def load_poi():

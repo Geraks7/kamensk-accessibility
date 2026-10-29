@@ -27,10 +27,13 @@ DIST_M = 11_000
 ROOT = Path(__file__).resolve().parents[1]
 OUT_PROC = ROOT / "data" / "processed"
 OUT_MAPS = ROOT / "maps"
+CACHE = ROOT / "data" / "cache"
 OUT_PROC.mkdir(parents=True, exist_ok=True)
 OUT_MAPS.mkdir(parents=True, exist_ok=True)
+CACHE.mkdir(parents=True, exist_ok=True)
 
 ox.settings.use_cache = True
+ox.settings.cache_folder = str(CACHE)
 ox.settings.log_console = True
 
 
