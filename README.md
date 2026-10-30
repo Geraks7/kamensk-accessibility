@@ -59,8 +59,9 @@
 - [x] Слой объектов социальной инфраструктуры из OSM (`src/02_poi.py`)
 - [x] Расчёт доступности, дублирования и нормативного baseline (`src/03_accessibility.py`)
 - [x] Сценарии сокращения сети и реестр объектов (`src/04_scenario.py`)
+- [x] Тематические карты (`src/05_maps.py`)
 - [ ] Сверка POI с официальными перечнями `obr-ku.ru` и `miacso.ru`
-- [ ] Карты сценариев и веб-карта
+- [ ] Веб-карта
 - [ ] Презентация и тизер
 
 ## Структура репозитория
@@ -174,6 +175,14 @@ kamensk-accessibility/
 Полные таблицы: `data/processed/scenario_summary.csv`, `scenario_objects.csv`,
 `critical_objects.csv`.
 
+### Карты
+
+![Пешеходная доступность школ](maps/02_coverage_school.png)
+
+![Пешеходная доступность медицинских учреждений](maps/03_coverage_clinic.png)
+
+![Критичные объекты](maps/04_critical_objects.png)
+
 ## Запуск
 
 ```bash
@@ -185,6 +194,7 @@ python src/01_city_map.py
 python src/02_poi.py
 python src/03_accessibility.py
 python src/04_scenario.py
+python src/05_maps.py
 ```
 
 Результаты третьего шага: `data/processed/accessibility.gpkg`,
