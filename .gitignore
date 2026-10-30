@@ -31,3 +31,7 @@ src/cache/
 *.log
 
 data/cache/
+
+# Временные файлы рендера
+.dsh-office-*
+render_*.json

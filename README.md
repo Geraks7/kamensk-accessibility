@@ -63,8 +63,9 @@
 - [x] Сценарии сокращения сети и реестр объектов (`src/04_scenario.py`)
 - [x] Тематические карты (`src/05_maps.py`)
 - [x] Веб-карта (`src/06_webmap.py`, GitHub Pages)
+- [x] Презентация 8 слайдов (`src/07_presentation.py`)
 - [ ] Сверка POI с официальными перечнями `obr-ku.ru` и `miacso.ru`
-- [ ] Презентация и тизер
+- [ ] Аналитическая записка и тизер
 
 ## Структура репозитория
 
@@ -85,6 +86,7 @@ kamensk-accessibility/
 │   ├── METHOD.md     # методика, допущения, чувствительность
 │   ├── PLAN.md       # план работ и критерии
 │   └── index.html    # веб-карта (GitHub Pages)
+├── presentation.pptx # презентация на 8 слайдов
 ├── requirements.txt
 └── README.md
 ```
