@@ -1,0 +1,10 @@
+scenario,type,n_objects_before,n_objects_removed,coverage_before,coverage_after,loss_pp,allowed_loss_pp,mean_time_before_min,mean_time_after_min,cap_binding
+умеренный,school,36,12,0.6711,0.6711,0.0,0.0,12.46,12.76,False
+средний,school,36,18,0.6711,0.6631,0.8,1.0,12.46,13.43,True
+радикальный,school,36,18,0.6711,0.6631,0.8,3.0,12.46,13.43,True
+умеренный,kindergarten,64,32,0.662,0.662,0.0,0.0,12.56,13.18,True
+средний,kindergarten,64,32,0.662,0.662,0.0,1.0,12.56,13.18,True
+радикальный,kindergarten,64,32,0.662,0.662,0.0,3.0,12.56,13.18,True
+умеренный,clinic,31,10,0.4581,0.4581,0.0,0.0,17.19,17.28,False
+средний,clinic,31,15,0.4581,0.4541,0.4,1.0,17.19,17.47,True
+радикальный,clinic,31,15,0.4581,0.4541,0.4,3.0,17.19,17.47,True
