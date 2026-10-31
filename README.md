@@ -6,6 +6,8 @@
 
 **Веб-карта:** [geraks7.github.io/kamensk-accessibility](https://geraks7.github.io/kamensk-accessibility/)
 
+**Тизер проекта (PDF, 1 страница):** [teaser.pdf](teaser.pdf)
+
 ## Исследовательский вопрос
 
 Как изменение сети социальных объектов влияет на пространственную доступность услуг и
