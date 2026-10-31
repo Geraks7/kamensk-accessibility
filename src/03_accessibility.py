@@ -1,28 +1,10 @@
-"""Шаг 3: пешеходная доступность, дублирование и нормативный baseline.
+"""Пешеходная доступность и нормативный baseline.
 
-Что считает:
-    1) время по пешеходной сети от каждой жилой застройки до ближайшего объекта
-       каждого типа (школа, детский сад, медицинское учреждение);
-    2) покрытие при порогах 10 / 15 / 20 минут и скоростях 4 / 4.5 / 5 км/ч;
-    3) индекс дублирования — сколько объектов доступно в пределах порога;
-    4) разрыв «нормативный радиус — фактическая пешеходная доступность».
-
-Вход:
-    data/processed/kamensk_walk.graphml
-    data/processed/poi_osm.gpkg
-
-Выход:
-    data/processed/accessibility.gpkg
-    data/processed/buildings_residential.gpkg  (кэш жилой застройки)
-    data/processed/coverage_summary.csv
-    data/processed/duplication.csv
-    data/processed/normative_baseline.csv
-
-Запуск (из любой папки):
-    python src/03_accessibility.py
+Время по сети до ближайших школ, детсадов и поликлиник, покрытие,
+дублирование и разрыв с СП 42.13330. Жилая застройка тянется из Overpass
+и кэшируется, чтобы не дёргать сервер при каждом пересчёте.
 """
 import time
-from pathlib import Path
 
 import geopandas as gpd
 import networkx as nx
@@ -31,13 +13,7 @@ import osmnx as ox
 import pandas as pd
 import requests
 
-ROOT = Path(__file__).resolve().parents[1]
-PROC = ROOT / "data" / "processed"
-CACHE = ROOT / "data" / "cache"
-
-PLACE = "Каменск-Уральский, Свердловская область, Россия"
-
-UTM = "EPSG:32641"  # UTM 41N — подходит для 60-66° в.д.
+from common import CACHE, PROC, TYPES, UTM, load_graph, load_poi, snap_to_nodes, subset
 
 # Публичные серверы Overpass: если один перегружен, пробуем следующий.
 OVERPASS_ENDPOINTS = [
@@ -50,13 +26,6 @@ OVERPASS_ENDPOINTS = [
 OVERPASS_HEADERS = {
     "User-Agent": "kamensk-accessibility/0.1 (student GIS project)",
     "Accept": "application/json",
-}
-
-# Тип объекта -> теги OSM.
-TYPES = {
-    "school": {"amenity": ["school"]},
-    "kindergarten": {"amenity": ["kindergarten"]},
-    "clinic": {"amenity": ["clinic", "hospital", "doctors"]},
 }
 
 # Нормативные радиусы обслуживания, м (СП 42.13330; проверить по актуальной редакции).
@@ -77,62 +46,11 @@ RESIDENTIAL_BUILDING = [
 ]
 
 
-def load_graph():
-    path = PROC / "kamensk_walk.graphml"
-    if not path.exists():
-        raise SystemExit(f"Нет {path}. Сначала запустите src/01_city_map.py")
-    G = ox.load_graphml(path)
-    print(f"Граф: узлов {G.number_of_nodes()}, рёбер {G.number_of_edges()}")
-    return G
-
-
-def load_poi():
-    """Сверенный слой, если он есть, иначе сырой OSM."""
-    for name in ("poi_verified.gpkg", "poi_osm.gpkg"):
-        path = PROC / name
-        if path.exists():
-            gdf = gpd.read_file(path)
-            if gdf.crs is None:
-                gdf = gdf.set_crs(4326)
-            print(f"  объекты: {name}")
-            return gdf.to_crs(4326)
-    raise SystemExit("Нет poi_verified.gpkg или poi_osm.gpkg. Запустите src/02_poi.py")
-
-
-def _subset_by_tags(poi, tags):
-    mask = pd.Series(False, index=poi.index)
-    for col, values in tags.items():
-        if col in poi.columns:
-            mask |= poi[col].isin(values)
-    return poi[mask]
-
-
-def snap_to_nodes(points_wgs84, G):
-    """Ближайший узел графа для каждой точки.
-
-    Работает без scikit-learn: граф уже спроецирован, привязка идёт через
-    пространственный индекс geopandas (sjoin_nearest).
-    """
-    nodes = gpd.GeoDataFrame(
-        {"node": list(G.nodes())},
-        geometry=gpd.points_from_xy(
-            [d["x"] for _, d in G.nodes(data=True)],
-            [d["y"] for _, d in G.nodes(data=True)],
-        ),
-        crs=G.graph["crs"],
-    )
-    pts = points_wgs84.to_crs(nodes.crs).reset_index(drop=True)
-    pts = gpd.GeoDataFrame({"geometry": list(pts)}, crs=nodes.crs)
-    joined = gpd.sjoin_nearest(pts, nodes, how="left", distance_col="snap_m")
-    joined = joined.groupby(level=0).first()
-    return joined["node"].reindex(pts.index)
-
-
 def facilities_by_type(poi, G):
     """Узлы графа, соответствующие объектам каждого типа."""
     out = {}
     for name, tags in TYPES.items():
-        sub = _subset_by_tags(poi, tags)
+        sub = subset(poi, tags)
         if sub.empty:
             print(f"  {name}: объектов не найдено — тип пропускается")
             continue
@@ -285,7 +203,7 @@ def normative_table(demand, poi, dist_by_type):
     total = demand["buildings"].sum()
     rows = []
     for name, tags in TYPES.items():
-        sub = _subset_by_tags(poi, tags)
+        sub = subset(poi, tags)
         if sub.empty or name not in dist_by_type:
             continue
         fac_m = sub.to_crs(UTM)

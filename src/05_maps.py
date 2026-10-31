@@ -1,26 +1,9 @@
-"""Шаг 5: тематические карты по результатам расчётов.
+"""Карты доступности и критичных объектов.
 
-Карты:
-    02_coverage_school.png    — время до ближайшей школы
-    03_coverage_clinic.png    — время до ближайшей поликлиники
-    04_critical_objects.png   — критичные объекты и их вклад в доступность
-
-Вход:
-    data/processed/boundary.gpkg
-    data/processed/accessibility.gpkg
-    data/processed/poi_osm.gpkg
-    data/processed/critical_objects.gpkg
-
-Выход:
-    maps/02_coverage_school.png
-    maps/03_coverage_clinic.png
-    maps/04_critical_objects.png
-
-Запуск (из любой папки):
-    python src/05_maps.py
+Три PNG в maps/: время до школы, время до поликлиники, критичные объекты
+с подписями. Всё в одном масштабе и с атрибуцией OSM.
 """
 import re
-from pathlib import Path
 
 import geopandas as gpd
 import matplotlib
@@ -28,11 +11,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parents[1]
-PROC = ROOT / "data" / "processed"
-MAPS = ROOT / "maps"
+from common import MAPS, PROC, UTM, subset
 
-UTM = "EPSG:32641"
 ATTR = "Данные: © OpenStreetMap contributors (ODbL)"
 
 BINS = [0, 5, 10, 15, 20, 60]
@@ -67,14 +47,6 @@ def short_name(name):
     s = re.sub(r"^(?:средняя|основная)\s+общеобразовательная\s+школа", "Школа", s, flags=re.I)
     s = re.sub(r"^муниципаль\w*\s+[\w\s]+?\s+учреждение\s+", "", s, flags=re.I)
     return re.sub(r"\s+", " ", s).strip(" ,")
-
-
-def subset(poi, tags):
-    mask = False
-    for col, values in tags.items():
-        if col in poi.columns:
-            mask = mask | poi[col].isin(values)
-    return poi[mask]
 
 
 def coverage_map(acc, boundary, poi, column, tags, title, subtitle, outfile):

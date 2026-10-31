@@ -1,46 +1,17 @@
-"""Шаг 4: сценарии сокращения сети и реестр объектов.
+"""Сценарии сокращения сети и реестр объектов.
 
-Логика:
-    1) для каждого объекта считаем зону 15-минутной пешеходной доступности;
-    2) базовое покрытие — доля жилой застройки, от которой доступен хотя бы один объект;
-    3) жадный алгоритм убирает объекты, если суммарная потеря покрытия не превышает
-       допустимую (умеренный сценарий — 0 %, средний — 1 %, радикальный — 3 %);
-    4) отдельно считаем «критичность» каждого объекта: сколько жилья потеряет
-       доступность, если убрать только его.
-
-Вход:
-    data/processed/kamensk_walk.graphml
-    data/processed/poi_osm.gpkg
-    data/processed/accessibility.gpkg   (результат шага 3)
-
-Выход:
-    data/processed/scenario_summary.csv
-    data/processed/scenario_objects.csv
-    data/processed/critical_objects.csv
-    data/processed/scenario_removed.gpkg
-
-Запуск (из любой папки):
-    python src/04_scenario.py
+Жадно убираем объекты, пока суммарная потеря покрытия не выйдет за бюджет
+сценария. Отдельно считаем критичность: сколько жилья потеряет доступность,
+если закрыть только этот объект.
 """
 from collections import Counter
-from pathlib import Path
 
 import geopandas as gpd
 import networkx as nx
 import osmnx as ox
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[1]
-PROC = ROOT / "data" / "processed"
-CACHE = ROOT / "data" / "cache"
-
-PLACE = "Каменск-Уральский, Свердловская область, Россия"
-
-TYPES = {
-    "school": {"amenity": ["school"]},
-    "kindergarten": {"amenity": ["kindergarten"]},
-    "clinic": {"amenity": ["clinic", "hospital", "doctors"]},
-}
+from common import CACHE, PROC, TYPES, load_graph, load_poi, snap_to_nodes, subset
 
 THRESHOLD_MIN = 15
 SPEED_KMH = 4.5
@@ -58,58 +29,17 @@ SCENARIOS = {
 MAX_REMOVE_SHARE = 0.5
 
 
-def load_graph():
-    path = PROC / "kamensk_walk.graphml"
-    if not path.exists():
-        raise SystemExit(f"Нет {path}. Сначала запустите src/01_city_map.py")
-    return ox.project_graph(ox.load_graphml(path))
-
-
-def load_poi():
-    for name in ("poi_verified.gpkg", "poi_osm.gpkg"):
-        path = PROC / name
-        if path.exists():
-            gdf = gpd.read_file(path)
-            if gdf.crs is None:
-                gdf = gdf.set_crs(4326)
-            return gdf.to_crs(4326)
-    raise SystemExit("Нет poi_verified.gpkg или poi_osm.gpkg")
-
-
 def load_demand():
     path = PROC / "accessibility.gpkg"
     if not path.exists():
-        raise SystemExit(f"Нет {path}. Сначала запустите src/03_accessibility.py")
+        raise SystemExit(f"нет {path} — сначала запустите src/03_accessibility.py")
     gdf = gpd.read_file(path)
     return gdf[["node", "buildings", "geometry"]].copy()
 
 
-def subset_by_tags(poi, tags):
-    mask = pd.Series(False, index=poi.index)
-    for col, values in tags.items():
-        if col in poi.columns:
-            mask |= poi[col].isin(values)
-    return poi[mask]
-
-
-def snap_to_nodes(points_wgs84, G):
-    nodes = gpd.GeoDataFrame(
-        {"node": list(G.nodes())},
-        geometry=gpd.points_from_xy(
-            [d["x"] for _, d in G.nodes(data=True)],
-            [d["y"] for _, d in G.nodes(data=True)],
-        ),
-        crs=G.graph["crs"],
-    )
-    pts = points_wgs84.to_crs(nodes.crs).reset_index(drop=True)
-    pts = gpd.GeoDataFrame({"geometry": list(pts)}, crs=nodes.crs)
-    joined = gpd.sjoin_nearest(pts, nodes, how="left", distance_col="snap_m")
-    return joined.groupby(level=0).first()["node"].reindex(pts.index)
-
-
 def service_nodes(poi, G, tags):
     """Уникальные узлы обслуживания с числом объектов и названием."""
-    sub = subset_by_tags(poi, tags)
+    sub = subset(poi, tags)
     if sub.empty:
         return gpd.GeoDataFrame()
     pts = sub.geometry.representative_point()
@@ -239,7 +169,7 @@ def main():
     ox.settings.cache_folder = str(CACHE)
 
     print("1. Загрузка данных")
-    G = load_graph()
+    G = ox.project_graph(load_graph())
     poi = load_poi()
     demand = load_demand()
     weights = dict(zip(demand["node"].astype(int), demand["buildings"].astype(int)))

@@ -1,23 +1,7 @@
-"""Шаг 2c: сверка OSM с официальными перечнями.
+"""Сверка OSM с муниципальными перечнями.
 
-Что делает:
-    1) чистит OSM-слой от ложных объектов (танцевальные студии, художественные школы);
-    2) сопоставляет объекты OSM с муниципальным перечнем по номеру;
-    3) недостающие в OSM муниципальные объекты геокодирует по адресу (Nominatim);
-    4) сохраняет сверенный слой и отчёт о расхождениях.
-
-Вход:
-    data/processed/poi_osm.gpkg
-    data/raw/official_schools.csv
-    data/raw/official_kindergartens.csv
-
-Выход:
-    data/processed/poi_verified.gpkg
-    data/processed/poi_verification.csv
-    data/raw/official_missing_geocoded.csv
-
-Запуск:
-    python src/02c_verify_poi.py
+Убирает ложные объекты, сопоставляет по номеру, недостающие геокодирует
+и складывает всё в poi_verified.gpkg.
 """
 import re
 import time

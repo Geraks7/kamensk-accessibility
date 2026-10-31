@@ -1,18 +1,4 @@
-"""Шаг 7: презентация проекта (PPTX).
-
-Собирает presentation.pptx: 8 слайдов с ключевыми числами и картами.
-
-Вход:
-    maps/01_walk_graph.png
-    maps/02_coverage_school.png
-    maps/04_critical_objects.png
-
-Выход:
-    presentation.pptx
-
-Запуск:
-    python src/07_presentation.py
-"""
+"""Презентация проекта на 8 слайдов."""
 from pathlib import Path
 
 from pptx import Presentation

@@ -29,14 +29,9 @@ maps/draft_*
 # Логи и кэш osmnx
 run*.log
 cache/
-src/cache/
 *.log
 
 data/cache/
-
-# Временные файлы рендера
-.dsh-office-*
-render_*.json
 
 # Временные файлы отчёта
 ~$*.docx

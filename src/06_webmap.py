@@ -1,29 +1,16 @@
-"""Шаг 6: интерактивная веб-карта (GitHub Pages).
+"""Интерактивная карта для GitHub Pages.
 
-Собирает docs/index.html: граница округа, доступность школ и поликлиник,
-объекты инфраструктуры и критичные объекты с всплывающими карточками.
-
-Вход:
-    data/processed/boundary.gpkg
-    data/processed/accessibility.gpkg
-    data/processed/poi_osm.gpkg
-    data/processed/critical_objects.gpkg
-
-Выход:
-    docs/index.html
-
-Запуск (из любой папки):
-    python src/06_webmap.py
+Собирает docs/index.html из готовых слоёв: граница округа, доступность,
+объекты и критичные точки с карточками.
 """
 import html
-from pathlib import Path
 
 import folium
 import geopandas as gpd
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[1]
-PROC = ROOT / "data" / "processed"
+from common import PROC, ROOT
+
 DOCS = ROOT / "docs"
 
 CENTER = [56.4145, 61.9186]

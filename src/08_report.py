@@ -1,30 +1,12 @@
-"""Шаг 8: аналитическая записка (DOCX).
+"""Аналитическая записка.
 
-Собирает report.docx: резюме, постановка задачи, данные, метод, результаты,
-ограничения, приложения с таблицами и картами. Числа берутся из CSV, полученных
-на шагах 03–04, поэтому записка не расходится с расчётом.
-
-Вход:
-    data/processed/coverage_summary.csv
-    data/processed/duplication.csv
-    data/processed/normative_baseline.csv
-    data/processed/scenario_summary.csv
-    data/processed/critical_objects.csv
-    data/processed/poi_verification.csv
-    data/processed/medical_verification.csv
-    maps/*.png
-
-Выход:
-    report.docx
-
-Запуск:
-    python src/08_report.py
+report.docx собирается из готовых CSV, поэтому числа в тексте не расходятся
+с расчётом.
 """
 from pathlib import Path
 
 import pandas as pd
 from docx import Document
-from docx.enum.section import WD_SECTION
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
