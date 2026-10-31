@@ -119,7 +119,9 @@ def main():
     DOCS.mkdir(parents=True, exist_ok=True)
     boundary = load("boundary.gpkg")
     acc = load("accessibility.gpkg")
-    poi = load("poi_osm.gpkg")
+    poi = load("poi_verified.gpkg")
+    if poi is None:
+        poi = load("poi_osm.gpkg")
     crit = load("critical_objects.gpkg")
 
     m = folium.Map(

@@ -87,13 +87,16 @@ def load_graph():
 
 
 def load_poi():
-    path = PROC / "poi_osm.gpkg"
-    if not path.exists():
-        raise SystemExit(f"Нет {path}. Сначала запустите src/02_poi.py")
-    gdf = gpd.read_file(path)
-    if gdf.crs is None:
-        gdf = gdf.set_crs(4326)
-    return gdf.to_crs(4326)
+    """Сверенный слой, если он есть, иначе сырой OSM."""
+    for name in ("poi_verified.gpkg", "poi_osm.gpkg"):
+        path = PROC / name
+        if path.exists():
+            gdf = gpd.read_file(path)
+            if gdf.crs is None:
+                gdf = gdf.set_crs(4326)
+            print(f"  объекты: {name}")
+            return gdf.to_crs(4326)
+    raise SystemExit("Нет poi_verified.gpkg или poi_osm.gpkg. Запустите src/02_poi.py")
 
 
 def _subset_by_tags(poi, tags):

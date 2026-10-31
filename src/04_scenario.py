@@ -66,10 +66,14 @@ def load_graph():
 
 
 def load_poi():
-    gdf = gpd.read_file(PROC / "poi_osm.gpkg")
-    if gdf.crs is None:
-        gdf = gdf.set_crs(4326)
-    return gdf.to_crs(4326)
+    for name in ("poi_verified.gpkg", "poi_osm.gpkg"):
+        path = PROC / name
+        if path.exists():
+            gdf = gpd.read_file(path)
+            if gdf.crs is None:
+                gdf = gdf.set_crs(4326)
+            return gdf.to_crs(4326)
+    raise SystemExit("Нет poi_verified.gpkg или poi_osm.gpkg")
 
 
 def load_demand():

@@ -159,7 +159,10 @@ def main():
     print("1. Загрузка данных")
     boundary = gpd.read_file(PROC / "boundary.gpkg").to_crs(UTM)
     acc = gpd.read_file(PROC / "accessibility.gpkg").to_crs(UTM)
-    poi = gpd.read_file(PROC / "poi_osm.gpkg").to_crs(UTM)
+    poi_file = PROC / "poi_verified.gpkg"
+    if not poi_file.exists():
+        poi_file = PROC / "poi_osm.gpkg"
+    poi = gpd.read_file(poi_file).to_crs(UTM)
 
     print("2. Карты доступности")
     coverage_map(
