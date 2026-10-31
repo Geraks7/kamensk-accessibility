@@ -40,3 +40,6 @@ render_*.json
 
 # Временные файлы отчёта
 ~$*.docx
+
+# Промежуточный QR для тизера
+data/processed/teaser_qr.png

@@ -67,8 +67,8 @@
 - [x] Сверка школ и детсадов с официальным перечнем `obr-ku.ru`
 - [x] Проверка медицинских площадок основного поставщика (7 из 7 найдены в OSM)
 - [x] Аналитическая записка (`src/08_report.py` → `report.docx`, 9 страниц)
+- [x] Одностраничный тизер (`src/09_teaser.py` → `teaser.pdf`)
 - [ ] Полная сверка медучреждений по всем юрлицам
-- [ ] Одностраничный тизер
 
 ## Структура репозитория
 
@@ -87,7 +87,9 @@ kamensk-accessibility/
 │   ├── 04_scenario.py        # сценарии адаптации сети
 │   ├── 05_maps.py            # статические карты
 │   ├── 06_webmap.py          # интерактивная карта
-│   └── 07_presentation.py    # презентация
+│   ├── 07_presentation.py    # презентация
+│   ├── 08_report.py          # аналитическая записка
+│   └── 09_teaser.py          # тизер на одну страницу
 ├── maps/             # готовые карты (PNG)
 ├── docs/
 │   ├── DATA.md       # источники данных и их ограничения
@@ -96,6 +98,7 @@ kamensk-accessibility/
 │   └── index.html    # веб-карта (GitHub Pages)
 ├── presentation.pptx # презентация на 8 слайдов
 ├── report.docx       # аналитическая записка, 9 страниц
+├── teaser.pdf        # тизер на одну страницу A4
 ├── requirements.txt
 └── README.md
 ```
@@ -256,6 +259,8 @@ python src/04_scenario.py
 python src/05_maps.py
 python src/06_webmap.py
 python src/07_presentation.py
+python src/08_report.py
+python src/09_teaser.py
 ```
 
 Результаты третьего шага: `data/processed/accessibility.gpkg`,
