@@ -42,8 +42,6 @@ MAP_URL = "https://geraks7.github.io/kamensk-accessibility/"
 GH_URL = "github.com/Geraks7/kamensk-accessibility"
 EMAIL = "shackovmaxim@gmail.com"
 
-NAME = "Максим Сачков"
-ROLE = "ГИС-аналитик · 11 класс · Екатеринбург"
 TITLE = "Доступность социальной инфраструктуры\nсжимающегося города"
 CITY = "Каменск-Уральский, Свердловская область · ~160 тыс. человек"
 
@@ -107,23 +105,21 @@ def main():
     fig_rect(fig, 0, 4.5, 30, 1.0, ACCENT, radius=0)
 
     # Шапка
-    fig_text(fig, 14, 12, ROLE.upper(), size=7.0, color=GRAY, weight="bold")
-    fig_text(fig, 14, 16, NAME, size=22, color=PRIMARY, weight="bold")
-    fig_text(fig, 14, 26, TITLE, size=13, color=PRIMARY, weight="bold", linespacing=1.2)
-    fig_text(fig, 14, 39.5, CITY, size=8.2, color=GRAY)
+    fig_text(fig, 14, 15, TITLE, size=14, color=PRIMARY, weight="bold", linespacing=1.2)
+    fig_text(fig, 14, 31, CITY, size=8.2, color=GRAY)
 
     # Три числа
-    card_w, card_h, gap = 55.0, 32.0, 6.0
+    card_w, card_h, gap = 55.0, 34.0, 6.0
     for i, (number, caption) in enumerate(CARDS):
         x = 14 + i * (card_w + gap)
-        fig_rect(fig, x, 47, card_w, card_h, LIGHT, radius=0.008)
-        fig_rect(fig, x, 47, 1.5, card_h, ACCENT, radius=0.004)
-        fig_text(fig, x + 5.5, 52, number, size=26, color=PRIMARY, weight="bold")
-        fig_text(fig, x + 5.5, 64, caption, size=7.8, color=TEXT, linespacing=1.3)
+        fig_rect(fig, x, 39, card_w, card_h, LIGHT, radius=0.008)
+        fig_rect(fig, x, 39, 1.5, card_h, ACCENT, radius=0.004)
+        fig_text(fig, x + 5.5, 44, number, size=27, color=PRIMARY, weight="bold")
+        fig_text(fig, x + 5.5, 57, caption, size=7.8, color=TEXT, linespacing=1.3)
 
     # Правая колонка: карта
     map_path = MAPS / "02_coverage_school.png"
-    map_bottom = 88.0
+    map_bottom = 82.0
     if map_path.exists():
         img = mpimg.imread(map_path)
         map_w = 76.0
@@ -139,8 +135,8 @@ def main():
                  "Время пешком до ближайшей школы", size=7.4, color=GRAY)
 
     # Левая колонка: что сделано
-    fig_text(fig, 14, 88, "ЧТО СДЕЛАНО", size=7.8, color=ACCENT, weight="bold")
-    y = 94.5
+    fig_text(fig, 14, 82, "ЧТО СДЕЛАНО", size=7.8, color=ACCENT, weight="bold")
+    y = 88.5
     for item in DONE:
         fig_text(fig, 14, y, "•", size=9, color=ACCENT, weight="bold")
         lines = wrap(item, 60)
