@@ -11,6 +11,7 @@
 | Граница городского округа | OSM relation 1298867 (`admin_level=6`) | полигон | `api.openstreetmap.org/api/0.6/relation/1298867` или из PBF | низкая |
 | Школы (адреса, телефоны, bus.gov.ru-ID) | `obr-ku.ru/munitsipalnye-uchrezhdeniya/obshcheobrazovatelnye-uchrezhdeniya` | HTML, 4 стр. | парсинг (`requests` + `BeautifulSoup`) | низкая |
 | Детские сады (включая корпуса) | `obr-ku.ru/munitsipalnye-uchrezhdeniya/doshkolnye-obrazovatelnye-uchrezhdeniya` | HTML, 6 стр. | парсинг | низкая |
+| Геокодирование адресов | Nominatim (`nominatim.openstreetmap.org/search`) | JSON | 1 запрос/сек, обязателен User-Agent | низкая |
 | Медицинские организации ГО | `miacso.ru/Documents/images/Site/21_Kam_Urak_GO_MO.pdf` | PDF | скачать, разобрать таблицу | низкая |
 | Маршруты, расписания, парковки | `kamensk-uralskiy.ru/gorodskaja_sreda/transport.html` | DOCX / XLSX | скачать | низкая |
 | Население, ввод жилья | ЕМИСС `fedstat.ru`, БД ПМО `gks.ru/dbscripts/munst/munst65/DBInet.cgi` | XLSX / HTML | выгрузка | средняя |
