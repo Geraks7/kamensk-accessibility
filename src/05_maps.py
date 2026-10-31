@@ -19,6 +19,7 @@
 Запуск (из любой папки):
     python src/05_maps.py
 """
+import re
 from pathlib import Path
 
 import geopandas as gpd
@@ -55,6 +56,17 @@ def scalebar(ax, length_km=2):
         left + frac / 2, 0.09, f"{length_km} км",
         transform=ax.transAxes, ha="center", va="bottom", fontsize=8, zorder=10,
     )
+
+
+def short_name(name):
+    """Длинное официальное название -> «Школа №39», «Детский сад №34»."""
+    if not isinstance(name, str):
+        return ""
+    m = re.search(r"«([^»]+)»", name)
+    s = m.group(1) if m else name
+    s = re.sub(r"^(?:средняя|основная)\s+общеобразовательная\s+школа", "Школа", s, flags=re.I)
+    s = re.sub(r"^муниципаль\w*\s+[\w\s]+?\s+учреждение\s+", "", s, flags=re.I)
+    return re.sub(r"\s+", " ", s).strip(" ,")
 
 
 def subset(poi, tags):
@@ -116,7 +128,9 @@ def critical_map(outfile):
         return
     crit = gpd.read_file(path).to_crs(UTM)
     boundary = gpd.read_file(PROC / "boundary.gpkg").to_crs(UTM)
-    crit = crit[crit.within(boundary.geometry.union_all())]
+    # Не обрезаем по границе: школа №39 стоит в Монастырке за пределами города,
+    # но обслуживает жилую застройку внутри него.
+    crit = crit[crit.geometry.notna()]
 
     fig, ax = plt.subplots(figsize=(9, 9))
     boundary.boundary.plot(ax=ax, color="#444444", linewidth=1.0, zorder=2)
@@ -134,7 +148,7 @@ def critical_map(outfile):
 
     for _, row in crit.head(5).iterrows():
         ax.annotate(
-            f"{row['name']}\n{row['loss_share'] * 100:.1f} % жилья",
+            f"{short_name(row['name'])}\n{row['loss_share'] * 100:.1f} % жилья",
             (row.geometry.x, row.geometry.y),
             textcoords="offset points", xytext=(8, 8), fontsize=7,
             bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="#999", alpha=0.85),
