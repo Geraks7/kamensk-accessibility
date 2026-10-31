@@ -37,3 +37,6 @@ data/cache/
 # Временные файлы рендера
 .dsh-office-*
 render_*.json
+
+# Временные файлы отчёта
+~$*.docx

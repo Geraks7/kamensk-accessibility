@@ -309,7 +309,8 @@ def normative_table(demand, poi, dist_by_type):
                 "norm_radius_m": radius,
                 "share_within_radius": round(within_radius, 4),
                 "share_network_at_radius": round(network_at_radius, 4),
-                "gap_pp": round((within_radius - network_at_radius) * 100, 1),
+                # Отрицательный разрыв = сеть даёт меньше, чем норматив по прямой
+                "gap_pp": round((network_at_radius - within_radius) * 100, 1),
                 "share_network_15min": round(network_15, 4),
                 "n_facilities": int(len(sub)),
             }
