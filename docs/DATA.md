@@ -13,6 +13,7 @@
 | Детские сады (включая корпуса) | `obr-ku.ru/munitsipalnye-uchrezhdeniya/doshkolnye-obrazovatelnye-uchrezhdeniya` | HTML, 6 стр. | парсинг | низкая |
 | Геокодирование адресов | Nominatim (`nominatim.openstreetmap.org/search`) | JSON | 1 запрос/сек, обязателен User-Agent | низкая |
 | Медицинские организации ГО | `miacso.ru/Documents/images/Site/21_Kam_Urak_GO_MO.pdf` | PDF | скачать, разобрать таблицу | низкая |
+| Площадки городской больницы | `medkamensk.ru/ob-uchrezhdenii/organizatsionnaya-struktura/` | HTML | парсинг вручную, 7 адресов | низкая |
 | Маршруты, расписания, парковки | `kamensk-uralskiy.ru/gorodskaja_sreda/transport.html` | DOCX / XLSX | скачать | низкая |
 | Население, ввод жилья | ЕМИСС `fedstat.ru`, БД ПМО `gks.ru/dbscripts/munst/munst65/DBInet.cgi` | XLSX / HTML | выгрузка | средняя |
 | Застроенная территория 1975–2030 | GHSL, JRC: `human-settlement.emergency.copernicus.eu` | GeoTIFF | скачать | низкая |
